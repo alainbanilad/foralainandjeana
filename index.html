@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Alain + Jeana — 11 &amp; 15 August 2026</title>
+<link rel="icon" type="image/svg+xml" href="img/monogram.svg">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -139,66 +140,15 @@ nav a:hover{color:var(--wine)}
 #music-sec .eyebrow{color:rgba(250,240,242,0.45)}
 #music-sec .sh{color:#FAF0F2;font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;margin-bottom:0.4rem}
 #music-sec .sh em{color:var(--wine-rose)}
-.audio-player{
+.spotify-wrap{
   margin:2rem auto 0;
-  max-width:480px;
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(193,86,106,0.25);
-  border-radius:16px;
-  padding:1.75rem 2rem;
-  display:flex;
-  flex-direction:column;
-  gap:1.1rem;
+  max-width:500px;
 }
-.audio-track{
-  display:flex;align-items:center;gap:1rem;
-}
-.audio-thumb{
-  width:48px;height:48px;border-radius:8px;
-  background:var(--wine-mid);
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;font-size:1.3rem;
-}
-.audio-meta{ text-align:left; }
-.audio-title{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.15rem;font-style:italic;
-  color:#FAF0F2;font-weight:400;line-height:1.2;
-}
-.audio-artist{
-  font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
-  color:rgba(250,240,242,0.5);margin-top:0.2rem;
-}
-.audio-controls{ display:flex;align-items:center;gap:1rem; }
-.audio-play-btn{
-  width:40px;height:40px;border-radius:50%;
-  background:var(--wine-rose);border:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;transition:background 0.2s,transform 0.15s;
-}
-.audio-play-btn:hover{background:var(--wine-mid);transform:scale(1.07)}
-.audio-play-btn svg{width:14px;height:14px;fill:#FAF0F2}
-.audio-progress-wrap{ flex:1;display:flex;flex-direction:column;gap:0.35rem; }
-.audio-progress{
-  width:100%;height:3px;
-  -webkit-appearance:none;appearance:none;
-  background:rgba(250,240,242,0.15);
-  border-radius:2px;cursor:pointer;outline:none;
-}
-.audio-progress::-webkit-slider-thumb{
-  -webkit-appearance:none;width:12px;height:12px;
-  border-radius:50%;background:var(--wine-rose);
-  cursor:pointer;margin-top:-4.5px;
-}
-.audio-progress::-webkit-slider-runnable-track{ height:3px;border-radius:2px; }
-.audio-progress::-moz-range-thumb{
-  width:12px;height:12px;border-radius:50%;
-  background:var(--wine-rose);cursor:pointer;border:none;
-}
-.audio-time{
-  display:flex;justify-content:space-between;
-  font-size:10px;letter-spacing:0.08em;
-  color:rgba(250,240,242,0.4);
+.spotify-wrap iframe{
+  border-radius:12px;
+  width:100%;
+  height:152px;
+  border:none;
 }
 
 /* DIVIDERS */
@@ -409,16 +359,16 @@ footer{background:var(--wine-deep);color:rgba(250,240,242,0.6);text-align:center
 <nav>
   <a href="#story">Story</a>
   <a href="#details">Details</a>
-  <span class="nav-mono">A+J</span>
+  <span class="nav-mono" onclick="launchConfetti()" style="cursor:pointer"><img src="img/monogram.svg" alt="A+J" style="height:38px;width:auto;opacity:0.75;vertical-align:middle"></span>
   <a href="#venue">Venue</a>
   <a href="#rsvp-sec">RSVP</a>
 </nav>
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-bg-text" aria-hidden="true">A+J</div>
+  <div class="hero-bg-text" aria-hidden="true"><img src="img/monogram.svg" alt="" style="width:min(520px,85vw);opacity:0.07;pointer-events:none;user-select:none"></div>
   <div class="pill">You're part of our story ✦</div>
-  <h1 class="hero-names">
+  <h1 class="hero-names" onclick="launchConfetti()" style="cursor:pointer;user-select:none">
     <span>Alain</span>
     <span class="hero-amp">+</span>
     <span>Jeana</span>
@@ -451,27 +401,8 @@ footer{background:var(--wine-deep);color:rgba(250,240,242,0.6);text-align:center
 <div id="music-sec">
   <p class="eyebrow">our song</p>
   <h2 class="sh">Playing us <em>in</em></h2>
-  <div class="audio-player">
-    <div class="audio-track">
-      <div class="audio-thumb">&#9834;</div>
-      <div class="audio-meta">
-        <div class="audio-title">Kabisado</div>
-        <div class="audio-artist">IV of Spades</div>
-      </div>
-    </div>
-    <div class="audio-controls">
-      <button class="audio-play-btn" id="audio-play-btn" aria-label="Play">
-        <svg id="audio-play-icon" viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg>
-      </button>
-      <div class="audio-progress-wrap">
-        <input class="audio-progress" id="audio-progress" type="range" min="0" max="100" value="0" step="0.1">
-        <div class="audio-time">
-          <span id="audio-current">0:00</span>
-          <span id="audio-duration">--:--</span>
-        </div>
-      </div>
-    </div>
-    <audio id="audio-el" preload="metadata" src="IV-OF-SPADES-Kabisado.mp3"></audio>
+  <div class="spotify-wrap">
+    <iframe src="https://open.spotify.com/embed/track/4z928BtE4j1bjhcX9RU44M?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
   </div>
 </div>
 
@@ -488,7 +419,7 @@ footer{background:var(--wine-deep);color:rgba(250,240,242,0.6);text-align:center
   <p class="body">But then, without either of us really noticing — everything, everywhere, changed all at once.</p>
   <p class="body">Three years of long distance, endless video calls, and one very long pandemic. We held on — because some things are simply worth it.</p>
   <p class="body">Until we finally found ourselves sharing a home in Singapore, where the real work began: learning each other in the small moments, the ordinary Tuesday evenings, the life we quietly built together.</p>
-  <p class="body">And then — a sun-drenched afternoon in Valldemossa, a little village on the island of Mallorca. A quiet garden we almost walked past. A question. A yes.</p>
+  <p class="body">And then one sun-drenched afternoon in Valldemossa...<br>at a little village on the island of Mallorca.<br><br>At a quiet garden we almost walked past.<br>A question.<br>A nervous laugh.<br>And an excited yes.</p>
   <p class="body">And now, here we are.</p>
   <p class="body">Turns out the greatest adventure wasn't underwater or up a mountain — who knew it would end up being this?</p>
   <p class="body">Two strangers.<br>Our favourite people.<br>One adventure of a lifetime.</p>
@@ -752,7 +683,8 @@ footer{background:var(--wine-deep);color:rgba(250,240,242,0.6);text-align:center
     <div class="deadline" style="margin-top:2rem">
       <div class="dl-icon">✦</div>
       <div class="dl-text">
-        <p>Please RSVP by <strong>3 August 2026</strong>. Need to make a change? Drop us a message and we'll sort it out. Don't know how to reach us? How did you even get ahold of this link? Lol</p>
+        <p>Please RSVP by <strong>3 August 2026</strong>. Need to make a change? Drop us a message and we'll sort it out.</p>
+        <p style="margin-top:0.5rem">Don't know how to reach us? How did you even get ahold of this link? Lol</p>
       </div>
     </div>
   </div>
@@ -830,26 +762,26 @@ footer{background:var(--wine-deep);color:rgba(250,240,242,0.6);text-align:center
   function loop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     pieces.forEach(function(p){ p.update(); p.draw(); });
-    if (Date.now() < endTime) {
+    var timeLeft = endTime - Date.now();
+    if (timeLeft > 0) {
+      // Gradually stop spawning new pieces as time runs out
+      if (timeLeft < 15000) {
+        // In last 15 seconds, pieces that fall off screen don't respawn
+        pieces = pieces.filter(function(p){ return p.y <= canvas.height + 20; });
+      }
       animId = requestAnimationFrame(loop);
     } else {
-      // fade out
-      fadeOut();
-    }
-  }
-
-  function fadeOut() {
-    var opacity = 1;
-    var fade = setInterval(function(){
-      opacity -= 0.02;
-      canvas.style.opacity = opacity;
-      if (opacity <= 0) {
-        clearInterval(fade);
+      // Let remaining pieces fall off naturally, no respawning
+      var remaining = pieces.filter(function(p){ return p.y <= canvas.height + 20; });
+      if (remaining.length > 0) {
+        pieces = remaining;
+        animId = requestAnimationFrame(loop);
+      } else {
         canvas.style.display = 'none';
-        canvas.style.opacity = 1;
         pieces = [];
+        animId = null;
       }
-    }, 30);
+    }
   }
 
   window.launchConfetti = function() {
@@ -911,52 +843,17 @@ els.forEach(function(el){io.observe(el)});
 
 <script>
 (function(){
-  var prompt   = document.getElementById('music-prompt');
-  var audio    = document.getElementById('audio-el');
-  var playBtn  = document.getElementById('audio-play-btn');
-  var playIcon = document.getElementById('audio-play-icon');
-  var progress = document.getElementById('audio-progress');
-  var curEl    = document.getElementById('audio-current');
-  var durEl    = document.getElementById('audio-duration');
+  var prompt = document.getElementById('music-prompt');
+  var iframe = document.querySelector('.spotify-wrap iframe');
+  var played = false;
 
-  var PAUSE_SVG = '<rect x="1" y="0" width="3" height="12"/><rect x="6" y="0" width="3" height="12"/>';
-  var PLAY_SVG  = '<polygon points="0,0 10,6 0,12"/>';
-
-  function fmt(s){
-    var m = Math.floor(s/60);
-    var sec = Math.floor(s%60);
-    return m+':'+(sec<10?'0':'')+sec;
-  }
-
-  audio.addEventListener('loadedmetadata', function(){
-    durEl.textContent = fmt(audio.duration);
-  });
-
-  audio.addEventListener('timeupdate', function(){
-    curEl.textContent = fmt(audio.currentTime);
-    if(audio.duration) progress.value = (audio.currentTime/audio.duration)*100;
-  });
-
-  audio.addEventListener('ended', function(){
-    playIcon.innerHTML = PLAY_SVG;
-  });
-
-  progress.addEventListener('input', function(){
-    if(audio.duration) audio.currentTime = (progress.value/100)*audio.duration;
-  });
-
-  playBtn.addEventListener('click', function(){
-    if(audio.paused){ audio.play(); playIcon.innerHTML = PAUSE_SVG; }
-    else { audio.pause(); playIcon.innerHTML = PLAY_SVG; }
-  });
-
-  // Floating prompt click — scroll to player, start playing, dismiss prompt
   function playAndDismiss(){
-    audio.play();
-    playIcon.innerHTML = PAUSE_SVG;
+    if(played) return;
+    played = true;
+    // Spotify embed API: send play command via postMessage
+    iframe.contentWindow.postMessage({command:'play'}, '*');
     prompt.classList.add('hide');
     setTimeout(function(){ prompt.style.display='none'; }, 600);
-    document.getElementById('music-sec').scrollIntoView({behavior:'smooth', block:'center'});
   }
 
   prompt.addEventListener('click', playAndDismiss);
@@ -968,9 +865,9 @@ els.forEach(function(el){io.observe(el)});
 // ── EmailJS config ──────────────────────────────────────────────
 // Alain: sign up free at https://emailjs.com, create a service + template,
 // then replace the three values below with your own IDs.
-const EMAILJS_SERVICE_ID  = 'service_fi2p2gg';
-const EMAILJS_TEMPLATE_ID = 'template_f9ca68w';
-const EMAILJS_PUBLIC_KEY  = 'wce2so5BAALyALpID';
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
+const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';
 
 emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 
