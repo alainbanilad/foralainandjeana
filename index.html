@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Alain + Jeana — 11 &amp; 15 August 2026</title>
+<link rel="icon" type="image/svg+xml" href="img/monogram.svg">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -409,16 +410,16 @@ footer{background:var(--wine-deep);color:rgba(250,240,242,0.6);text-align:center
 <nav>
   <a href="#story">Story</a>
   <a href="#details">Details</a>
-  <span class="nav-mono">A+J</span>
+  <span class="nav-mono" onclick="launchConfetti()" style="cursor:pointer"><img src="img/monogram.svg" alt="A+J" style="height:38px;width:auto;opacity:0.75;vertical-align:middle"></span>
   <a href="#venue">Venue</a>
   <a href="#rsvp-sec">RSVP</a>
 </nav>
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-bg-text" aria-hidden="true">A+J</div>
+  <div class="hero-bg-text" aria-hidden="true"><img src="img/monogram.svg" alt="" style="width:min(520px,85vw);opacity:0.07;pointer-events:none;user-select:none"></div>
   <div class="pill">You're part of our story ✦</div>
-  <h1 class="hero-names">
+  <h1 class="hero-names" onclick="launchConfetti()" style="cursor:pointer;user-select:none">
     <span>Alain</span>
     <span class="hero-amp">+</span>
     <span>Jeana</span>
@@ -488,7 +489,7 @@ footer{background:var(--wine-deep);color:rgba(250,240,242,0.6);text-align:center
   <p class="body">But then, without either of us really noticing — everything, everywhere, changed all at once.</p>
   <p class="body">Three years of long distance, endless video calls, and one very long pandemic. We held on — because some things are simply worth it.</p>
   <p class="body">Until we finally found ourselves sharing a home in Singapore, where the real work began: learning each other in the small moments, the ordinary Tuesday evenings, the life we quietly built together.</p>
-  <p class="body">And then — a sun-drenched afternoon in Valldemossa, a little village on the island of Mallorca. A quiet garden we almost walked past. A question. A yes.</p>
+  <p class="body">And then one sun-drenched afternoon in Valldemossa...<br>at a little village on the island of Mallorca.<br><br>At a quiet garden we almost walked past.<br>A question.<br>A nervous laugh.<br>And an excited yes.</p>
   <p class="body">And now, here we are.</p>
   <p class="body">Turns out the greatest adventure wasn't underwater or up a mountain — who knew it would end up being this?</p>
   <p class="body">Two strangers.<br>Our favourite people.<br>One adventure of a lifetime.</p>
@@ -752,7 +753,8 @@ footer{background:var(--wine-deep);color:rgba(250,240,242,0.6);text-align:center
     <div class="deadline" style="margin-top:2rem">
       <div class="dl-icon">✦</div>
       <div class="dl-text">
-        <p>Please RSVP by <strong>3 August 2026</strong>. Need to make a change? Drop us a message and we'll sort it out. Don't know how to reach us? How did you even get ahold of this link? Lol</p>
+        <p>Please RSVP by <strong>3 August 2026</strong>. Need to make a change? Drop us a message and we'll sort it out.</p>
+        <p style="margin-top:0.5rem">Don't know how to reach us? How did you even get ahold of this link? Lol</p>
       </div>
     </div>
   </div>
@@ -830,26 +832,26 @@ footer{background:var(--wine-deep);color:rgba(250,240,242,0.6);text-align:center
   function loop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     pieces.forEach(function(p){ p.update(); p.draw(); });
-    if (Date.now() < endTime) {
+    var timeLeft = endTime - Date.now();
+    if (timeLeft > 0) {
+      // Gradually stop spawning new pieces as time runs out
+      if (timeLeft < 15000) {
+        // In last 15 seconds, pieces that fall off screen don't respawn
+        pieces = pieces.filter(function(p){ return p.y <= canvas.height + 20; });
+      }
       animId = requestAnimationFrame(loop);
     } else {
-      // fade out
-      fadeOut();
-    }
-  }
-
-  function fadeOut() {
-    var opacity = 1;
-    var fade = setInterval(function(){
-      opacity -= 0.02;
-      canvas.style.opacity = opacity;
-      if (opacity <= 0) {
-        clearInterval(fade);
+      // Let remaining pieces fall off naturally, no respawning
+      var remaining = pieces.filter(function(p){ return p.y <= canvas.height + 20; });
+      if (remaining.length > 0) {
+        pieces = remaining;
+        animId = requestAnimationFrame(loop);
+      } else {
         canvas.style.display = 'none';
-        canvas.style.opacity = 1;
         pieces = [];
+        animId = null;
       }
-    }, 30);
+    }
   }
 
   window.launchConfetti = function() {
