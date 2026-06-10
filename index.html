@@ -139,15 +139,66 @@ nav a:hover{color:var(--wine)}
 #music-sec .eyebrow{color:rgba(250,240,242,0.45)}
 #music-sec .sh{color:#FAF0F2;font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;margin-bottom:0.4rem}
 #music-sec .sh em{color:var(--wine-rose)}
-.spotify-wrap{
+.audio-player{
   margin:2rem auto 0;
-  max-width:500px;
+  max-width:480px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(193,86,106,0.25);
+  border-radius:16px;
+  padding:1.75rem 2rem;
+  display:flex;
+  flex-direction:column;
+  gap:1.1rem;
 }
-.spotify-wrap iframe{
-  border-radius:12px;
-  width:100%;
-  height:152px;
-  border:none;
+.audio-track{
+  display:flex;align-items:center;gap:1rem;
+}
+.audio-thumb{
+  width:48px;height:48px;border-radius:8px;
+  background:var(--wine-mid);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:1.3rem;
+}
+.audio-meta{ text-align:left; }
+.audio-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.15rem;font-style:italic;
+  color:#FAF0F2;font-weight:400;line-height:1.2;
+}
+.audio-artist{
+  font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+  color:rgba(250,240,242,0.5);margin-top:0.2rem;
+}
+.audio-controls{ display:flex;align-items:center;gap:1rem; }
+.audio-play-btn{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--wine-rose);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:background 0.2s,transform 0.15s;
+}
+.audio-play-btn:hover{background:var(--wine-mid);transform:scale(1.07)}
+.audio-play-btn svg{width:14px;height:14px;fill:#FAF0F2}
+.audio-progress-wrap{ flex:1;display:flex;flex-direction:column;gap:0.35rem; }
+.audio-progress{
+  width:100%;height:3px;
+  -webkit-appearance:none;appearance:none;
+  background:rgba(250,240,242,0.15);
+  border-radius:2px;cursor:pointer;outline:none;
+}
+.audio-progress::-webkit-slider-thumb{
+  -webkit-appearance:none;width:12px;height:12px;
+  border-radius:50%;background:var(--wine-rose);
+  cursor:pointer;margin-top:-4.5px;
+}
+.audio-progress::-webkit-slider-runnable-track{ height:3px;border-radius:2px; }
+.audio-progress::-moz-range-thumb{
+  width:12px;height:12px;border-radius:50%;
+  background:var(--wine-rose);cursor:pointer;border:none;
+}
+.audio-time{
+  display:flex;justify-content:space-between;
+  font-size:10px;letter-spacing:0.08em;
+  color:rgba(250,240,242,0.4);
 }
 
 /* DIVIDERS */
@@ -400,8 +451,27 @@ footer{background:var(--wine-deep);color:rgba(250,240,242,0.6);text-align:center
 <div id="music-sec">
   <p class="eyebrow">our song</p>
   <h2 class="sh">Playing us <em>in</em></h2>
-  <div class="spotify-wrap">
-    <iframe src="https://open.spotify.com/embed/track/4z928BtE4j1bjhcX9RU44M?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+  <div class="audio-player">
+    <div class="audio-track">
+      <div class="audio-thumb">&#9834;</div>
+      <div class="audio-meta">
+        <div class="audio-title">Kabisado</div>
+        <div class="audio-artist">IV of Spades</div>
+      </div>
+    </div>
+    <div class="audio-controls">
+      <button class="audio-play-btn" id="audio-play-btn" aria-label="Play">
+        <svg id="audio-play-icon" viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg>
+      </button>
+      <div class="audio-progress-wrap">
+        <input class="audio-progress" id="audio-progress" type="range" min="0" max="100" value="0" step="0.1">
+        <div class="audio-time">
+          <span id="audio-current">0:00</span>
+          <span id="audio-duration">--:--</span>
+        </div>
+      </div>
+    </div>
+    <audio id="audio-el" preload="metadata" src="IV-OF-SPADES-Kabisado.mp3"></audio>
   </div>
 </div>
 
@@ -841,17 +911,52 @@ els.forEach(function(el){io.observe(el)});
 
 <script>
 (function(){
-  var prompt = document.getElementById('music-prompt');
-  var iframe = document.querySelector('.spotify-wrap iframe');
-  var played = false;
+  var prompt   = document.getElementById('music-prompt');
+  var audio    = document.getElementById('audio-el');
+  var playBtn  = document.getElementById('audio-play-btn');
+  var playIcon = document.getElementById('audio-play-icon');
+  var progress = document.getElementById('audio-progress');
+  var curEl    = document.getElementById('audio-current');
+  var durEl    = document.getElementById('audio-duration');
 
+  var PAUSE_SVG = '<rect x="1" y="0" width="3" height="12"/><rect x="6" y="0" width="3" height="12"/>';
+  var PLAY_SVG  = '<polygon points="0,0 10,6 0,12"/>';
+
+  function fmt(s){
+    var m = Math.floor(s/60);
+    var sec = Math.floor(s%60);
+    return m+':'+(sec<10?'0':'')+sec;
+  }
+
+  audio.addEventListener('loadedmetadata', function(){
+    durEl.textContent = fmt(audio.duration);
+  });
+
+  audio.addEventListener('timeupdate', function(){
+    curEl.textContent = fmt(audio.currentTime);
+    if(audio.duration) progress.value = (audio.currentTime/audio.duration)*100;
+  });
+
+  audio.addEventListener('ended', function(){
+    playIcon.innerHTML = PLAY_SVG;
+  });
+
+  progress.addEventListener('input', function(){
+    if(audio.duration) audio.currentTime = (progress.value/100)*audio.duration;
+  });
+
+  playBtn.addEventListener('click', function(){
+    if(audio.paused){ audio.play(); playIcon.innerHTML = PAUSE_SVG; }
+    else { audio.pause(); playIcon.innerHTML = PLAY_SVG; }
+  });
+
+  // Floating prompt click — scroll to player, start playing, dismiss prompt
   function playAndDismiss(){
-    if(played) return;
-    played = true;
-    // Spotify embed API: send play command via postMessage
-    iframe.contentWindow.postMessage({command:'play'}, '*');
+    audio.play();
+    playIcon.innerHTML = PAUSE_SVG;
     prompt.classList.add('hide');
     setTimeout(function(){ prompt.style.display='none'; }, 600);
+    document.getElementById('music-sec').scrollIntoView({behavior:'smooth', block:'center'});
   }
 
   prompt.addEventListener('click', playAndDismiss);
