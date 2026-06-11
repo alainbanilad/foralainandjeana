@@ -42,38 +42,48 @@ nav a:hover{color:var(--wine)}
   min-height:100vh;display:flex;flex-direction:column;
   align-items:center;justify-content:center;
   text-align:center;padding:8rem 2rem 5rem;
-  background:var(--cream);position:relative;overflow:hidden;
+  position:relative;overflow:hidden;
+  background-image:linear-gradient(180deg,rgba(45,12,20,0.62),rgba(45,12,20,0.72)),url('img/hero-bg.jpg');
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-attachment:scroll;
+}
+@media (min-width:769px){
+  #hero{ background-attachment:fixed; }
 }
 .hero-bg-text{
   position:absolute;font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:22vw;color:var(--wine-pale);opacity:0.55;
+  font-size:22vw;color:rgba(255,255,255,0.5);opacity:0.12;
   letter-spacing:-0.02em;line-height:1;pointer-events:none;user-select:none;
   top:50%;transform:translateY(-50%);white-space:nowrap;
 }
 .pill{
   display:inline-block;font-size:10.5px;letter-spacing:0.2em;text-transform:uppercase;
-  color:var(--wine);border:1px solid rgba(193,86,106,0.4);border-radius:100px;
+  color:var(--wine-blush);border:1px solid rgba(250,240,242,0.4);border-radius:100px;
   padding:0.4rem 1.3rem;margin-bottom:2.2rem;font-weight:400;
-  background:var(--wine-blush);position:relative;
+  background:rgba(122,28,46,0.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  position:relative;
   animation:fadeUp 0.8s ease both;
 }
 .hero-names{
   font-family:'Cormorant Garamond',serif;
   font-size:clamp(4rem,11vw,8rem);font-weight:300;
-  line-height:1;color:var(--wine-deep);letter-spacing:0.015em;
+  line-height:1;color:var(--white);letter-spacing:0.015em;
+  text-shadow:0 2px 24px rgba(0,0,0,0.35);
   position:relative;animation:fadeUp 0.8s 0.15s ease both;
   display:flex;flex-direction:column;align-items:center;gap:0;
 }
 .hero-amp{font-style:normal;color:var(--wine-rose);font-size:0.7em;line-height:1;margin:0;padding:0;font-weight:300}
 .hero-meta{
-  display:flex;align-items:center;gap:0.5rem;justify-content:center;
-  flex-wrap:wrap;
-  margin-top:2rem;font-size:clamp(9px,2.2vw,12px);letter-spacing:0.12em;text-transform:uppercase;
-  color:var(--gray-md);font-weight:300;position:relative;
+  display:flex;align-items:center;gap:0.9rem;justify-content:center;
+  margin-top:2rem;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;
+  color:rgba(255,255,255,0.85);font-weight:300;position:relative;
+  text-shadow:0 1px 12px rgba(0,0,0,0.3);
   animation:fadeUp 0.8s 0.3s ease both;
-  padding:0 1rem;
 }
-.hdot{width:3px;height:3px;border-radius:50%;background:var(--wine-rose);opacity:0.7;flex-shrink:0}
+.hdot{width:3px;height:3px;border-radius:50%;background:var(--wine-rose);opacity:0.9;flex-shrink:0}
+
 
 /* PHOTO FRAME */
 .photo-frame{
