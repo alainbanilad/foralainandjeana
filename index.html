@@ -703,18 +703,7 @@ footer{background:var(--wine-deep);color:rgba(250,240,242,0.6);text-align:center
         </div>
       </div>
 
-      <!-- Number of guests -->
       <div id="attendance-yes" style="display:none">
-      <div class="form-group">
-        <label class="form-label">Number of guests (including yourself) <span class="form-req">*</span></label>
-        <select class="form-input" id="rsvp-guests">
-          <option value="" disabled selected>Select...</option>
-          <option value="1">Just me</option>
-          <option value="2">2 guests</option>
-          <option value="3">3 guests</option>
-          <option value="4">4 guests</option>
-        </select>
-      </div>
 
       <!-- Dietary -->
       <div class="form-group">
@@ -986,7 +975,6 @@ function submitRSVP(e) {
 
   var name     = document.getElementById('rsvp-name').value.trim();
   var email    = document.getElementById('rsvp-email').value.trim();
-  var guests   = document.getElementById('rsvp-guests').value;
   var dietary  = document.getElementById('rsvp-dietary').value.trim();
   var song     = document.getElementById('rsvp-song').value.trim();
   var message  = document.getElementById('rsvp-message').value.trim();
@@ -1003,10 +991,6 @@ function submitRSVP(e) {
     errEl.style.display = 'block';
     return;
   }
-  if (attendance === 'yes' && !guests) {
-    errEl.style.display = 'block';
-    return;
-  }
   errEl.style.display = 'none';
 
   submitBtn.textContent = 'Sending…';
@@ -1018,7 +1002,6 @@ function submitRSVP(e) {
     from_email: email,
     attendance: attendance === 'yes' ? 'Attending' : 'Not attending',
     events   : checked.length ? checked.join(' & ') : '—',
-    guests   : attendance === 'yes' ? guests : '—',
     dietary  : dietary || 'None',
     song     : song || '—',
     message  : message || '—'
