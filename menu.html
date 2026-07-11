@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Choose Your Main Course — Alain &amp; Jeana</title>
+<link rel="icon" type="image/png" href="img/monogram.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --wine:#7A1C2E;
+  --wine-deep:#5C1220;
+  --wine-mid:#A83348;
+  --wine-rose:#C1566A;
+  --wine-pale:#F5EAEC;
+  --wine-blush:#FAF0F2;
+  --cream:#FBF8F4;
+  --parchment:#F2EDE5;
+  --gray-dk:#2E2A27;
+  --gray-md:#6B6560;
+  --gray-lt:#E0D9D2;
+  --white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'DM Sans',sans-serif;
+  background-color:var(--cream);
+  color:var(--gray-dk);
+  overflow-x:hidden;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(180,160,140,0.03) 2px,rgba(180,160,140,0.03) 3px),repeating-linear-gradient(90deg,transparent,transparent 2px,rgba(180,160,140,0.03) 2px,rgba(180,160,140,0.03) 3px);
+}
+.wrap{max-width:640px;margin:0 auto;padding:3rem 1.4rem 4rem}
+.mono-top{text-align:center;margin-bottom:2.2rem}
+.mono-top img{height:64px;width:auto;opacity:0.85}
+.eyebrow{font-size:10.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--wine-rose);margin-bottom:0.8rem;font-weight:400;text-align:center}
+.sh{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:300;color:var(--wine);margin-bottom:1.2rem;line-height:1.2;text-align:center}
+.sh em{font-style:italic}
+.body{font-size:15px;line-height:1.9;color:var(--gray-md);font-weight:300;margin-bottom:1.2rem}
+.intro{text-align:center;max-width:520px;margin:0 auto 1rem}
+.deadline{
+  text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.1rem;color:var(--wine-mid);margin-bottom:2.5rem;
+}
+/* FORM */
+.form-group{margin-bottom:1.5rem}
+.form-label{display:block;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--wine);margin-bottom:0.5rem;font-weight:400}
+.form-req{color:var(--wine-rose)}
+.form-input{width:100%;padding:0.85rem 1rem;border:1px solid var(--gray-lt);background:var(--white);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--gray-dk);font-weight:300;outline:none;transition:border-color 0.2s;-webkit-appearance:none;border-radius:0}
+.form-input:focus{border-color:var(--wine-rose)}
+.form-textarea{resize:vertical;min-height:90px}
+/* DISH CARDS */
+.dish-cards{display:flex;flex-direction:column;gap:0.9rem;margin-top:0.25rem}
+.dish-card{
+  display:block;cursor:pointer;background:var(--white);
+  border:1px solid var(--gray-lt);padding:1.35rem 1.4rem;
+  transition:border-color 0.2s, background 0.2s;position:relative;
+}
+.dish-card:hover{border-color:var(--wine-rose)}
+.dish-card input{position:absolute;opacity:0;pointer-events:none}
+.dish-card .dc-check{
+  position:absolute;top:1.3rem;right:1.3rem;width:18px;height:18px;
+  border:1px solid var(--gray-lt);border-radius:50%;
+  transition:border-color 0.2s, background 0.2s;
+}
+.dish-card input:checked ~ .dc-check{background:var(--wine);border-color:var(--wine);box-shadow:inset 0 0 0 3px var(--white)}
+.dish-card input:checked ~ .dc-body .dish-name{color:var(--wine-deep)}
+.dish-card:has(input:checked){border-color:var(--wine);background:var(--wine-blush)}
+.dish-card input:focus-visible ~ .dc-check{outline:2px solid var(--wine-rose);outline-offset:2px}
+.dc-eyebrow{font-size:9.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--wine-rose);margin-bottom:0.4rem;font-weight:400}
+.dish-name{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;color:var(--gray-dk);line-height:1.25;margin-bottom:0.4rem;padding-right:2rem}
+.dish-sub{font-size:12.5px;color:var(--gray-md);font-weight:300;line-height:1.7}
+/* NOTES / STRIPS */
+.strip{
+  background:var(--wine);color:#FAF0F2;padding:1.5rem 1.6rem;margin:2.5rem 0 0;
+}
+.strip .st-eyebrow{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(250,240,242,0.5);margin-bottom:0.5rem;font-weight:400}
+.strip .st-main{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:300;line-height:1.4}
+.strip .st-main em{font-style:italic}
+.strip p{font-size:13px;line-height:1.8;color:rgba(250,240,242,0.85);font-weight:300;margin-top:0.6rem}
+.gift-note{background:var(--parchment);padding:1.6rem;margin-top:1rem}
+.gift-note .gn-eyebrow{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--wine-rose);margin-bottom:0.6rem;font-weight:400}
+.gift-note h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:var(--wine);margin-bottom:0.7rem}
+.gift-note h3 em{font-style:italic}
+.gift-note p{font-size:13.5px;line-height:1.85;color:var(--gray-md);font-weight:300;margin-bottom:0.8rem}
+.gift-note p:last-child{margin-bottom:0}
+/* FEEDBACK */
+.form-error{display:none;padding:0.9rem 1.1rem;background:#fff0f0;border-left:2px solid var(--wine-rose);font-size:13px;color:var(--wine-deep);margin-bottom:1rem}
+.form-success{display:none;align-items:flex-start;gap:1rem;padding:1.25rem 1.5rem;background:var(--wine-blush);border:1px solid rgba(193,86,106,0.3);margin-top:1.5rem}
+.fs-icon{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.5rem;color:var(--wine-rose);line-height:1;flex-shrink:0}
+.fs-text strong{display:block;font-size:14px;color:var(--wine-deep);margin-bottom:0.25rem;font-weight:500}
+.fs-text p{font-size:13px;color:var(--gray-md);font-weight:300;margin:0}
+.submit-btn{
+  display:block;width:100%;padding:1.2rem 1.5rem;margin-top:2rem;
+  background:var(--wine);color:#FAF0F2;text-align:center;border:none;cursor:pointer;
+  font-size:12px;letter-spacing:0.18em;text-transform:uppercase;font-weight:400;
+  transition:background 0.2s;font-family:'DM Sans',sans-serif;
+}
+.submit-btn:hover{background:var(--wine-deep)}
+.submit-btn:disabled{opacity:0.6;cursor:default}
+.footer-line{text-align:center;margin-top:3rem;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--wine-mid);opacity:0.75}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="mono-top"><img src="img/monogram.png" alt="Alain &amp; Jeana"></div>
+
+  <p class="eyebrow">Dinner Celebration · 15 August 2026 · Botanico at The Summerhouse</p>
+  <h1 class="sh">Choose your <em>main course</em></h1>
+  <p class="body intro">Thank you for saying yes to celebrating with us! We're finalising the dinner menu with the kitchen, and each guest gets to pick one of two mains. Tell us which one has your name on it.</p>
+  <p class="deadline">Please make your selection by 27 July 2026</p>
+
+  <form id="menu-form" novalidate>
+
+    <div class="form-group">
+      <label class="form-label" for="mf-name">Full name <span class="form-req">*</span></label>
+      <input class="form-input" type="text" id="mf-name" autocomplete="name" placeholder="So the kitchen knows whose plate is whose">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="mf-email">Email <span class="form-req">*</span></label>
+      <input class="form-input" type="email" id="mf-email" autocomplete="email" placeholder="We'll send your confirmation here">
+    </div>
+
+    <div class="form-group">
+      <span class="form-label">Your main course <span class="form-req">*</span></span>
+      <div class="dish-cards">
+
+        <label class="dish-card">
+          <input type="radio" name="main_course" value="Inka Smoked Iberico Pork Collar">
+          <span class="dc-check" aria-hidden="true"></span>
+          <span class="dc-body">
+            <span class="dc-eyebrow">First choice</span>
+            <span class="dish-name" style="display:block">Inka Smoked Iberico Pork Collar</span>
+            <span class="dish-sub" style="display:block">Roasted Baby Vegetables&ensp;·&ensp;Onion &amp; Yuzu Purée&ensp;·&ensp;Red Wine Yakiniku Sauce</span>
+          </span>
+        </label>
+
+        <label class="dish-card">
+          <input type="radio" name="main_course" value="Kelong Snapper Fillet">
+          <span class="dc-check" aria-hidden="true"></span>
+          <span class="dc-body">
+            <span class="dc-eyebrow">Second choice</span>
+            <span class="dish-name" style="display:block">Kelong Snapper Fillet</span>
+            <span class="dish-sub" style="display:block">Inka Grilled&ensp;·&ensp;Charred Lady Fingers&ensp;·&ensp;Broccolini&ensp;·&ensp;Pickled Onions&ensp;·&ensp;Champagne Caviar Sauce</span>
+          </span>
+        </label>
+
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="mf-dietary">Dietary notes <span style="text-transform:none;letter-spacing:0;color:var(--gray-md)">(optional)</span></label>
+      <textarea class="form-input form-textarea" id="mf-dietary" placeholder="Allergies or anything the kitchen should know"></textarea>
+    </div>
+
+    <div class="form-error" id="mf-error">Please fill in your name, email, and pick a main course.</div>
+
+    <button class="submit-btn" type="submit" id="mf-submit">Confirm my selection ✦</button>
+  </form>
+
+  <div class="form-success" id="mf-success">
+    <span class="fs-icon">✦</span>
+    <span class="fs-text">
+      <strong>Your main course is locked in!</strong>
+      <p id="mf-success-detail">A confirmation email is on its way to you.</p>
+    </span>
+  </div>
+
+  <div class="strip">
+    <p class="st-eyebrow">One important reminder</p>
+    <p class="st-main">Doors open at <em>5:30 PM</em> — the programme starts <em>strictly at 6:00 PM</em>.</p>
+    <p>Please come early so you have time to find your seat, grab a drink, and settle in. We'd hate for you to miss the opening moments!</p>
+  </div>
+
+  <div class="gift-note">
+    <p class="gn-eyebrow">A little note on gifts</p>
+    <h3>Your presence is <em>present enough</em></h3>
+    <p>Truly, we mean it — having you there is the only gift we need. But if you'd like to do a little something, cash gifts are always warmly welcome.</p>
+    <p>And here's our one cheeky request: bring a bottle of your favourite — a red, white, or sparkling wine, a spirit, or whatever gets you on the dance floor — to share with everyone. Think of it as your contribution to the evening's magic. 🍷</p>
+  </div>
+
+  <p class="footer-line">Alain &amp; Jeana · foralainandjeana.com</p>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+// ── Config ──────────────────────────────────────────────────────
+// 1) Paste your Apps Script Web App URL between the quotes below
+//    (it looks like https://script.google.com/macros/s/XXXXX/exec)
+const APPS_SCRIPT_URL = 'https://script.google.com/u/0/home/projects/1rQZn8muwvYz0ak6z9R3BcHLYtcHwzysXEKAsE2hFOYaT6vJOJLfiHnPF/edit';
+
+// 2) EmailJS: same service + public key as the RSVP form,
+//    plus the NEW template you'll create for menu confirmations
+const EMAILJS_SERVICE_ID  = 'service_fi2p2gg';
+const EMAILJS_TEMPLATE_ID = 'template_exxiyt5';
+const EMAILJS_PUBLIC_KEY  = 'wce2so5BAALyALpID';
+
+emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+document.getElementById('menu-form').addEventListener('submit', submitMenuChoice);
+
+function submitMenuChoice(e) {
+  e.preventDefault();
+
+  var name    = document.getElementById('mf-name').value.trim();
+  var email   = document.getElementById('mf-email').value.trim();
+  var dietary = document.getElementById('mf-dietary').value.trim();
+  var courseEl = document.querySelector('input[name="main_course"]:checked');
+  var course  = courseEl ? courseEl.value : '';
+
+  var errEl     = document.getElementById('mf-error');
+  var submitBtn = document.getElementById('mf-submit');
+
+  // Validate
+  var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if (!name || !email || !course || !emailOk) {
+    errEl.textContent = !emailOk && email
+      ? 'That email address doesn\u2019t look quite right — please double-check it.'
+      : 'Please fill in your name, email, and pick a main course.';
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+
+  submitBtn.textContent = 'Sending\u2026';
+  submitBtn.disabled = true;
+
+  // Step 1: save to Google Sheet via Apps Script
+  var payload = new URLSearchParams({
+    name: name,
+    email: email,
+    main_course: course,
+    dietary: dietary
+  });
+
+  fetch(APPS_SCRIPT_URL, { method: 'POST', body: payload })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.status !== 'ok') { throw new Error(data.message || 'Sheet write failed'); }
+
+      // Step 2: send confirmation email via EmailJS
+      var templateParams = {
+        to_email:    email,
+        to_name:     name,
+        main_course: course,
+        dietary:     dietary || 'None'
+      };
+
+      return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+        .then(function() { showSuccess(true); })
+        .catch(function() { showSuccess(false); }); // choice saved, email failed
+    })
+    .catch(function() {
+      submitBtn.textContent = 'Confirm my selection \u2726';
+      submitBtn.disabled = false;
+      errEl.textContent = 'Something went wrong saving your choice — please try again, or message us directly.';
+      errEl.style.display = 'block';
+    });
+}
+
+function showSuccess(emailSent) {
+  document.getElementById('menu-form').style.display = 'none';
+  var detail = document.getElementById('mf-success-detail');
+  detail.textContent = emailSent
+    ? 'A confirmation email is on its way to you. See you at 5:30 PM sharp!'
+    : 'Your choice has been saved! We couldn\u2019t send the confirmation email just now, but you\u2019re all set.';
+  document.getElementById('mf-success').style.display = 'flex';
+}
+</script>
+</body>
+</html>
