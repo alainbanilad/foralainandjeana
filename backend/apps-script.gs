@@ -322,49 +322,31 @@ function sendMenuReceipt(name, guestEmail, course, dietary) {
 }
 
 
-// Confirmation to the guest -- same voice as the RSVP replies
+// Confirmation to the guest -- short and sweet, CC to us both
 function sendMenuConfirmation(name, guestEmail, course, dietary) {
 
   var firstName   = name.split(' ')[0];
   var dietaryLine = dietary ? dietary : 'None';
-  var divider     = '----------------------------';
 
   var body =
     'Hi ' + firstName + ',\n\n' +
-    'Great choice - your main course is locked in! ' +
-    "Here's a recap of what we have on file for you:\n\n" +
-    divider + '\n' +
-    'YOUR DINNER SELECTION\n' +
-    divider + '\n' +
+    'Your main course is locked in!\n\n' +
     'Main course: ' + course + '\n' +
     'Dietary notes: ' + dietaryLine + '\n\n' +
-    divider + '\n' +
-    'ONE IMPORTANT REMINDER\n' +
-    divider + '\n' +
-    'Doors open at 5:30 PM, and the programme starts STRICTLY at ' +
-    '6:00 PM. Please come early so you have time to find your seat, ' +
-    'grab a drink, and settle in - we would hate for you to miss the ' +
-    'opening moments!\n\n' +
-    divider + '\n' +
-    'A LITTLE NOTE ON GIFTS\n' +
-    divider + '\n' +
-    'Your presence is present enough - truly, having you there is the ' +
-    'only gift we need. But if you would like to do a little something, ' +
-    'cash gifts are always warmly welcome.\n\n' +
-    'And our one cheeky request: bring a bottle of your favourite - a ' +
-    'red, white, or sparkling wine, a spirit, or whatever gets you on ' +
-    'the dance floor - to share with everyone. Think of it as your ' +
-    "contribution to the evening's magic.\n\n" +
-    'If anything above looks off, just reply to this email and we will ' +
-    'sort it out before the big day.\n\n' +
-    'We genuinely cannot wait to celebrate with you.\n\n' +
-    'With love (and mild chaos),\n' +
+    'Three things to remember:\n\n' +
+    '1. Arrive at 5:30 PM - the programme starts at 6:00 PM promptly.\n' +
+    '2. Bring a bottle of your favourite drink to share with everyone.\n' +
+    '3. We are at Botanico Lvl 2 @ The Summerhouse, 3 Park Lane.\n\n' +
+    'If anything looks off, just reply to this email.\n\n' +
+    'We cant wait to celebrate with you!\n\n' +
+    'With love,\n' +
     'Alain + Jeana';
 
   GmailApp.sendEmail(
     guestEmail,
     'Your main course is confirmed, ' + firstName + '!',
-    body
+    body,
+    { cc: COUPLE_EMAIL + ',' + COUPLE_CC }
   );
   Logger.log('Menu confirmation sent to: ' + guestEmail + ' | ' + course);
 }
