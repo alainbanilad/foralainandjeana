@@ -231,11 +231,17 @@ function createTrigger() {
 
 
 // ============================================================
-// PART 2 -- MENU SELECTION ENDPOINT (new)
-// Receives POSTs from menu.html, writes to "Menu Selections"
+// PART 2 -- MENU SELECTION ENDPOINT
+// Receives POSTs from menu.html, then:
+//   1. Writes a row to the "Menu Selections" tab
+//   2. Emails Alain + Jeana a receipt of what was submitted
+//   3. Emails the guest a confirmation (same style as RSVP replies)
+// All emails are sent from this Gmail account -- no EmailJS involved.
 // ============================================================
 
 var MENU_SHEET_NAME = 'Menu Selections';
+var COUPLE_EMAIL    = 'alain.banilad@gmail.com';
+var COUPLE_CC       = 'jeanathegreat@gmail.com';
 
 function doPost(e) {
   var lock = LockService.getScriptLock();
@@ -245,7 +251,7 @@ function doPost(e) {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     var sheet = ss.getSheetByName(MENU_SHEET_NAME);
 
-    // Create the tab with headers on first run (styled like your RSVPs tab)
+    // Create the tab with headers on first run (styled like the RSVPs tab)
     if (!sheet) {
       sheet = ss.insertSheet(MENU_SHEET_NAME);
       sheet.appendRow(['Timestamp', 'Name', 'Email', 'Main Course', 'Dietary Notes']);
@@ -263,15 +269,26 @@ function doPost(e) {
       return jsonReply({ status: 'error', message: 'Missing required fields' });
     }
 
-    sheet.appendRow([
-      new Date(),
-      p.name,
-      p.email,
-      p.main_course,
-      p.dietary || ''
-    ]);
+    var name    = p.name;
+    var email   = p.email;
+    var course  = p.main_course;
+    var dietary = p.dietary || '';
 
-    return jsonReply({ status: 'ok' });
+    // 1. Save to the sheet (the source of truth -- happens first)
+    sheet.appendRow([new Date(), name, email, course, dietary]);
+
+    // 2 + 3. Send the emails. Wrapped separately so an email hiccup
+    // never loses the guest's saved choice.
+    var emailsSent = true;
+    try {
+      sendMenuReceipt(name, email, course, dietary);
+      sendMenuConfirmation(name, email, course, dietary);
+    } catch (mailErr) {
+      emailsSent = false;
+      Logger.log('Menu emails failed for ' + email + ': ' + mailErr);
+    }
+
+    return jsonReply({ status: 'ok', emails_sent: emailsSent });
 
   } catch (err) {
     return jsonReply({ status: 'error', message: String(err) });
@@ -279,6 +296,79 @@ function doPost(e) {
     lock.releaseLock();
   }
 }
+
+
+// Receipt to Alain + Jeana with exactly what the guest submitted
+function sendMenuReceipt(name, guestEmail, course, dietary) {
+
+  var body =
+    'New menu selection received via foralainandjeana.com/menu\n\n' +
+    '----------------------------\n' +
+    'Name: ' + name + '\n' +
+    'Email: ' + guestEmail + '\n' +
+    'Main course: ' + course + '\n' +
+    'Dietary notes: ' + (dietary || 'None') + '\n' +
+    '----------------------------\n\n' +
+    'This has been saved to the "Menu Selections" tab, and the guest ' +
+    'has been sent a confirmation email.';
+
+  GmailApp.sendEmail(
+    COUPLE_EMAIL,
+    'New menu selection from ' + name,
+    body,
+    { cc: COUPLE_CC }
+  );
+  Logger.log('Menu receipt sent for: ' + name);
+}
+
+
+// Confirmation to the guest -- same voice as the RSVP replies
+function sendMenuConfirmation(name, guestEmail, course, dietary) {
+
+  var firstName   = name.split(' ')[0];
+  var dietaryLine = dietary ? dietary : 'None';
+  var divider     = '----------------------------';
+
+  var body =
+    'Hi ' + firstName + ',\n\n' +
+    'Great choice - your main course is locked in! ' +
+    "Here's a recap of what we have on file for you:\n\n" +
+    divider + '\n' +
+    'YOUR DINNER SELECTION\n' +
+    divider + '\n' +
+    'Main course: ' + course + '\n' +
+    'Dietary notes: ' + dietaryLine + '\n\n' +
+    divider + '\n' +
+    'ONE IMPORTANT REMINDER\n' +
+    divider + '\n' +
+    'Doors open at 5:30 PM, and the programme starts STRICTLY at ' +
+    '6:00 PM. Please come early so you have time to find your seat, ' +
+    'grab a drink, and settle in - we would hate for you to miss the ' +
+    'opening moments!\n\n' +
+    divider + '\n' +
+    'A LITTLE NOTE ON GIFTS\n' +
+    divider + '\n' +
+    'Your presence is present enough - truly, having you there is the ' +
+    'only gift we need. But if you would like to do a little something, ' +
+    'cash gifts are always warmly welcome.\n\n' +
+    'And our one cheeky request: bring a bottle of your favourite - a ' +
+    'red, white, or sparkling wine, a spirit, or whatever gets you on ' +
+    'the dance floor - to share with everyone. Think of it as your ' +
+    "contribution to the evening's magic.\n\n" +
+    'If anything above looks off, just reply to this email and we will ' +
+    'sort it out before the big day.\n\n' +
+    'We genuinely cannot wait to celebrate with you.\n\n' +
+    'With love (and mild chaos),\n' +
+    'Alain + Jeana';
+
+  GmailApp.sendEmail(
+    guestEmail,
+    'Your main course is confirmed, ' + firstName + '!',
+    body
+  );
+  Logger.log('Menu confirmation sent to: ' + guestEmail + ' | ' + course);
+}
+
 
 // Visiting the web app URL in a browser gives a friendly response
 // (also handy as a quick "is it deployed?" check)
